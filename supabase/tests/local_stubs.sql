@@ -1,0 +1,10 @@
+create schema extensions; create schema auth; create schema realtime; create schema cron;
+do $$ begin create role authenticated; exception when others then null; end $$;
+do $$ begin create role anon; exception when others then null; end $$;
+create table auth.users (id uuid primary key default gen_random_uuid());
+create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('test.uid', true), '')::uuid $$;
+create table realtime.messages (id serial, topic text);
+alter table realtime.messages enable row level security;
+create function realtime.topic() returns text language sql as $$ select '' $$;
+create publication supabase_realtime;
+create function cron.schedule(a text, b text, c text) returns bigint language sql as $$ select 1::bigint $$;

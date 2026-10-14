@@ -1,0 +1,11 @@
+{
+  "home": {
+    "search": "מחפש חניה",
+    "leave": "מפנה חניה",
+    "noVehicle": "הוסף רכב כדי להתחיל"
+  },
+  "setup": {
+    "title": "חסרה הגדרת Supabase",
+    "body": "העתק את mobile/.env.example ל־mobile/.env ומלא את הפרטים."
+  }
+}
