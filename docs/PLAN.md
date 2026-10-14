@@ -3,7 +3,7 @@
 ## Stack
 - **Mobile:** Expo (React Native) + expo-router + TypeScript, `react-native-maps`, `expo-location`, `expo-notifications`, Zustand, i18next (עברית / RTL)
 - **Backend:** Supabase – Postgres + PostGIS, Realtime, RPC functions (`security definer`), `pg_cron`
-- **Auth:** Phone OTP
+- **Auth:** Google / Apple (native, `signInWithIdToken`) + email OTP — ללא עלות SMS
 
 ## החלטות מוצר
 | נושא | החלטה |
@@ -55,8 +55,8 @@ credit_ledger   id, user_id, match_id, delta, reason
 ## שלבים
 | # | שלב | סטטוס |
 |---|---|---|
-| 0 | Setup: Expo, Supabase, PostGIS, RTL, סכמה + RPCs | ✅ (חסר: חיבור לפרויקט Supabase) |
-| 1 | Auth (Phone OTP), פרופיל, רכבים, רכב פעיל | |
+| 0 | Setup: Expo, Supabase, PostGIS, RTL, סכמה + RPCs | ✅ |
+| 1 | Auth (Google / Apple / email OTP), פרופיל, רכבים, רכב פעיל | 🔄 בבדיקה |
 | 2 | Home: מפה, מיקום, bar עליון, כפתורים | |
 | 3 | Sessions: התחלה / ביטול / תפוגה | |
 | 4 | Matching + Realtime | |
