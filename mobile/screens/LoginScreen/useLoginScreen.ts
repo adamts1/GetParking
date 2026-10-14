@@ -9,13 +9,20 @@ import {
   signInWithGoogle,
 } from '../../lib/auth';
 
-export type Provider = 'google' | 'apple';
+export enum SignInProvider {
+  Google = 'google',
+  Apple = 'apple',
+  Email = 'email',
+}
+
+/** The providers with a native sheet; email has its own screen. */
+export type NativeProvider = SignInProvider.Google | SignInProvider.Apple;
 
 export function useLoginScreen() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const [emailOpen, setEmailOpen] = useState(false);
   const [appleReady, setAppleReady] = useState(false);
-  const [busy, setBusy] = useState<Provider | null>(null);
+  const [busy, setBusy] = useState<NativeProvider | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Sign in with Apple exists on iOS 13+ only; the button is hidden elsewhere.
@@ -23,17 +30,17 @@ export function useLoginScreen() {
     void appleAvailable().then(setAppleReady).catch(() => setAppleReady(false));
   }, []);
 
-  const signIn = async (provider: Provider) => {
+  const signIn = async (provider: NativeProvider) => {
     setBusy(provider);
     setError(null);
     try {
-      await (provider === 'google' ? signInWithGoogle() : signInWithApple());
+      await (provider === SignInProvider.Google ? signInWithGoogle() : signInWithApple());
       // No setBusy(null) on success: the gate swaps this screen out, and
       // clearing the spinner first would flash the buttons back for a frame.
-    } catch (e) {
-      const key = authErrorKey(e);
+    } catch (requestError) {
+      const key = authErrorKey(requestError);
       // Backing out of the native sheet is not an error worth showing.
-      if (key !== 'auth.errors.cancelled') setError(t(key));
+      if (key !== 'auth.errors.cancelled') setError(translate(key));
       setBusy(null);
     }
   };

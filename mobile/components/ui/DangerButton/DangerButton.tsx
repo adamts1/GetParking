@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, Text } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 import { styles } from './DangerButton.styles';
 
 type Props = { label: string; onPress: () => void; loading?: boolean };
@@ -15,7 +15,7 @@ export function DangerButton({ label, onPress, loading }: Props) {
       disabled={loading}
       style={({ pressed }) => [styles.button, pressed && { opacity: 0.7 }]}
     >
-      {loading ? <ActivityIndicator color={C.danger} /> : <Text style={styles.label}>{label}</Text>}
+      {loading ? <ActivityIndicator color={colors.danger} /> : <Text style={styles.label}>{label}</Text>}
     </Pressable>
   );
 }

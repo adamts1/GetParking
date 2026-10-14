@@ -2,22 +2,22 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Icon, ModalHeader } from '../../components/ui';
-import { alpha, C, s } from '../../theme';
+import { Icon, IconName, ModalHeader } from '../../components/ui';
+import { alpha, colors, sharedStyles } from '../../theme';
 import { colorHex, type Vehicle } from '../../lib/vehicles';
 import { styles } from './VehicleListScreen.styles';
 import { useVehicleList } from './useVehicleList';
 
 /** My cars: pick the one in use, or add another. */
 export function VehicleListScreen() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const insets = useSafeAreaInsets();
   const { vehicles, activeId, pending, select, remove } = useVehicleList();
 
   return (
-    <View style={[s.screen, { paddingTop: insets.top + 16 }]}>
+    <View style={[sharedStyles.screen, { paddingTop: insets.top + 16 }]}>
       <View style={styles.content}>
-        <ModalHeader title={t('vehicle.listTitle')} closeLabel={t('common.back')} onClose={() => router.back()} />
+        <ModalHeader title={translate('vehicle.listTitle')} closeLabel={translate('common.back')} onClose={() => router.back()} />
       </View>
 
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 24 }]}>
@@ -33,10 +33,10 @@ export function VehicleListScreen() {
         ))}
 
         <Pressable onPress={() => router.push('/vehicles/new')} style={styles.add} accessibilityRole="button">
-          <View style={[styles.icon, { backgroundColor: C.glass }]}>
-            <Icon name="plus" size={22} />
+          <View style={[styles.icon, { backgroundColor: colors.glass }]}>
+            <Icon name={IconName.Plus} size={22} />
           </View>
-          <Text style={styles.addLabel}>{t('vehicle.addNew')}</Text>
+          <Text style={styles.addLabel}>{translate('vehicle.addNew')}</Text>
         </Pressable>
       </ScrollView>
     </View>
@@ -56,7 +56,7 @@ function VehicleRow({
   onSelect: () => void;
   onRemove: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const hex = colorHex(vehicle.color);
 
   return (
@@ -67,22 +67,22 @@ function VehicleRow({
       style={[styles.row, active && styles.selected]}
     >
       <View style={[styles.icon, { backgroundColor: alpha(hex, 0.13) }]}>
-        <Icon name="car" size={24} color={hex} />
+        <Icon name={IconName.Car} size={24} color={hex} />
       </View>
-      <View style={s.fill}>
+      <View style={sharedStyles.fill}>
         <Text style={styles.name}>{vehicle.make_model}</Text>
         <Text style={styles.detail}>
-          {t(`vehicle.colors.${vehicle.color}`, { defaultValue: vehicle.color })} ·{' '}
-          {t('vehicle.plateShort', { digits: vehicle.plate_last_digits })}
+          {translate(`vehicle.colors.${vehicle.color}`, { defaultValue: vehicle.color })} ·{' '}
+          {translate('vehicle.plateShort', { digits: vehicle.plate_last_digits })}
         </Text>
       </View>
       {active ? (
         <View style={styles.check}>
-          <Icon name="check" size={14} color={C.onColor} />
+          <Icon name={IconName.Check} size={14} color={colors.onColor} />
         </View>
       ) : (
-        <Pressable onPress={onRemove} hitSlop={10} accessibilityLabel={t('vehicle.delete')}>
-          <Icon name="trash" size={18} color={C.textTertiary} />
+        <Pressable onPress={onRemove} hitSlop={10} accessibilityLabel={translate('vehicle.delete')}>
+          <Icon name={IconName.Trash} size={18} color={colors.textTertiary} />
         </Pressable>
       )}
     </Pressable>

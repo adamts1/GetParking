@@ -8,17 +8,17 @@ export function useCountdown() {
   const [remaining, setRemaining] = useState(0);
   useEffect(() => {
     if (remaining <= 0) return;
-    const timer = setTimeout(() => setRemaining((n) => n - 1), 1000);
+    const timer = setTimeout(() => setRemaining((seconds) => seconds - 1), 1000);
     return () => clearTimeout(timer);
   }, [remaining]);
   return [remaining, setRemaining] as const;
 }
 
 /** Clears a transient value (a toast, a "saved" flash) after a moment. */
-export function useAutoClear(value: unknown, clear: () => void, ms = 5000) {
+export function useAutoClear(value: unknown, clear: () => void, delayMs = 5000) {
   useEffect(() => {
     if (!value) return;
-    const timer = setTimeout(clear, ms);
+    const timer = setTimeout(clear, delayMs);
     return () => clearTimeout(timer);
-  }, [value, clear, ms]);
+  }, [value, clear, delayMs]);
 }

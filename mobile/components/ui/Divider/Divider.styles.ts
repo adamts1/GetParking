@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 
 export const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 14, marginVertical: 18 },
-  rule: { flex: 1, height: 1, backgroundColor: C.glassBorder },
-  label: { color: C.textTertiary, fontSize: 12 },
+  rule: { flex: 1, height: 1, backgroundColor: colors.glassBorder },
+  label: { color: colors.textTertiary, fontSize: 12 },
 });

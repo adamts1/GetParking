@@ -2,18 +2,18 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button, Field, GlassCard, GlassRow, ModalHeader } from '../../components/ui';
-import { s } from '../../theme';
+import { Button, Field, GlassCard, GlassRow, IconName, ModalHeader } from '../../components/ui';
+import { sharedStyles } from '../../theme';
 import { styles } from './ProfileScreen.styles';
 import { useProfileScreen } from './useProfileScreen';
 
 export function ProfileScreen() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const insets = useSafeAreaInsets();
-  const p = useProfileScreen();
+  const profile = useProfileScreen();
 
   return (
-    <KeyboardAvoidingView style={s.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={sharedStyles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
         contentContainerStyle={[
           styles.content,
@@ -21,32 +21,32 @@ export function ProfileScreen() {
         ]}
         keyboardShouldPersistTaps="handled"
       >
-        <ModalHeader title={t('profile.title')} closeLabel={t('common.back')} onClose={() => router.back()} />
+        <ModalHeader title={translate('profile.title')} closeLabel={translate('common.back')} onClose={() => router.back()} />
 
         <GlassCard style={styles.credits}>
-          <Text style={s.body}>{t('profile.credits')}</Text>
-          <Text style={styles.creditsValue}>{p.credits}</Text>
+          <Text style={sharedStyles.body}>{translate('profile.credits')}</Text>
+          <Text style={styles.creditsValue}>{profile.credits}</Text>
         </GlassCard>
 
         <Field
-          label={t('vehicle.nickname')}
-          hint={t('vehicle.nicknameHint')}
-          icon="user"
-          value={p.name}
-          onChangeText={p.setName}
+          label={translate('vehicle.nickname')}
+          hint={translate('vehicle.nicknameHint')}
+          icon={IconName.User}
+          value={profile.name}
+          onChangeText={profile.setName}
           maxLength={30}
-          error={p.nameError}
+          error={profile.nameError}
         />
         <Button
-          label={p.saved ? t('profile.saved') : t('common.save')}
-          disabled={!p.dirty && !p.saved}
-          loading={p.saving}
-          onPress={() => void p.save()}
+          label={profile.saved ? translate('profile.saved') : translate('common.save')}
+          disabled={!profile.dirty && !profile.saved}
+          loading={profile.saving}
+          onPress={() => void profile.save()}
           style={styles.save}
         />
 
-        <GlassRow icon="car" label={t('profile.vehicles')} chevron onPress={() => router.push('/vehicles')} />
-        <GlassRow label={t('profile.signOut')} onPress={p.signOut} />
+        <GlassRow icon={IconName.Car} label={translate('profile.vehicles')} chevron onPress={() => router.push('/vehicles')} />
+        <GlassRow label={translate('profile.signOut')} onPress={profile.signOut} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, R, start } from '../../../theme';
+import { colors, radius, start } from '../../../theme';
 
 export const styles = StyleSheet.create({
   wrap: { marginBottom: 14 },
@@ -8,13 +8,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     paddingHorizontal: 16,
-    borderRadius: R.md,
-    backgroundColor: C.glass,
+    borderRadius: radius.md,
+    backgroundColor: colors.glass,
     borderWidth: 1,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
-  invalid: { borderColor: C.dangerLine },
-  input: { flex: 1, color: C.text, fontSize: 15, paddingVertical: 14, textAlign: start },
+  invalid: { borderColor: colors.dangerLine },
+  input: { flex: 1, color: colors.text, fontSize: 15, paddingVertical: 14, textAlign: start },
   note: { marginTop: 6 },
-  error: { color: C.danger },
+  error: { color: colors.danger },
 });

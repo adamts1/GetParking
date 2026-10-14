@@ -7,18 +7,18 @@ import { useTranslation } from 'react-i18next';
 import { useAccount } from '../../lib/account';
 import * as api from '../../lib/api';
 import { suggestedNickname, useAuth } from '../../lib/auth';
-import { PLATE_DIGITS_RE, type CarColor } from '../../lib/vehicles';
+import { CarColor, PLATE_DIGITS_RE } from '../../lib/vehicles';
 import type { VehicleFormProps } from './VehicleForm';
 
 type FieldErrors = { name?: string; makeModel?: string; plate?: string };
 
 export function useVehicleForm({ onDone, onSkip, askName = false, askCar = true }: VehicleFormProps) {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const { session } = useAuth();
   const { profile, refresh } = useAccount();
   const [name, setName] = useState(() => (askName ? suggestedNickname(session) : ''));
   const [makeModel, setMakeModel] = useState('');
-  const [color, setColor] = useState<CarColor>('white');
+  const [color, setColor] = useState(CarColor.White);
   const [plate, setPlate] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,9 +26,9 @@ export function useVehicleForm({ onDone, onSkip, askName = false, askCar = true 
 
   const validate = (withCar: boolean) => {
     const errors: FieldErrors = {};
-    if (askName && !name.trim()) errors.name = t('vehicle.errors.name');
-    if (withCar && !makeModel.trim()) errors.makeModel = t('vehicle.errors.makeModel');
-    if (withCar && !PLATE_DIGITS_RE.test(plate)) errors.plate = t('vehicle.errors.plate');
+    if (askName && !name.trim()) errors.name = translate('vehicle.errors.name');
+    if (withCar && !makeModel.trim()) errors.makeModel = translate('vehicle.errors.makeModel');
+    if (withCar && !PLATE_DIGITS_RE.test(plate)) errors.plate = translate('vehicle.errors.plate');
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -50,7 +50,7 @@ export function useVehicleForm({ onDone, onSkip, askName = false, askCar = true 
       await refresh();
       after();
     } catch {
-      setError(t('errors.unknown'));
+      setError(translate('errors.unknown'));
       setSaving(false);
     }
   };

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, SPACE } from '../../theme';
+import { colors, SPACE } from '../../theme';
 
 export const styles = StyleSheet.create({
   content: { paddingHorizontal: SPACE.lg },
@@ -11,6 +11,6 @@ export const styles = StyleSheet.create({
     paddingVertical: SPACE.lg,
     marginBottom: SPACE.xl,
   },
-  creditsValue: { color: C.success, fontSize: 28, fontWeight: '800' },
+  creditsValue: { color: colors.success, fontSize: 28, fontWeight: '800' },
   save: { marginBottom: SPACE.xl },
 });

@@ -6,7 +6,7 @@ import * as api from '../../lib/api';
 import type { Vehicle } from '../../lib/vehicles';
 
 export function useVehicleList() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const { vehicles, vehicle: active, refresh } = useAccount();
   const [pending, setPending] = useState<string | null>(null);
 
@@ -17,7 +17,7 @@ export function useVehicleList() {
       await api.setActiveVehicle(vehicle.id);
       await refresh();
     } catch {
-      Alert.alert(t('errors.unknown'));
+      Alert.alert(translate('errors.unknown'));
     } finally {
       setPending(null);
     }
@@ -27,13 +27,13 @@ export function useVehicleList() {
      profile would point at an archived car and searches would carry it. */
   const remove = (vehicle: Vehicle) => {
     if (vehicle.id === active?.id) return;
-    Alert.alert(t('vehicle.deleteConfirm', { name: vehicle.make_model }), undefined, [
-      { text: t('common.cancel'), style: 'cancel' },
+    Alert.alert(translate('vehicle.deleteConfirm', { name: vehicle.make_model }), undefined, [
+      { text: translate('common.cancel'), style: 'cancel' },
       {
-        text: t('vehicle.delete'),
+        text: translate('vehicle.delete'),
         style: 'destructive',
         onPress: async () => {
-          await api.archiveVehicle(vehicle.id).catch(() => Alert.alert(t('errors.unknown')));
+          await api.archiveVehicle(vehicle.id).catch(() => Alert.alert(translate('errors.unknown')));
           await refresh().catch(() => {});
         },
       },

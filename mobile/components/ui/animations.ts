@@ -41,10 +41,10 @@ export function useRadarRings(active: boolean, count = 3, duration = 2500) {
   const values = [useValue(0), useValue(0), useValue(0)].slice(0, count);
   useEffect(() => {
     if (!active) return;
-    const loops = values.map((value, i) =>
+    const loops = values.map((value, index) =>
       Animated.loop(
         Animated.sequence([
-          Animated.delay(i * (duration / count)),
+          Animated.delay(index * (duration / count)),
           Animated.timing(value, { toValue: 1, duration, easing: Easing.out(Easing.quad), useNativeDriver: true }),
           Animated.timing(value, { toValue: 0, duration: 0, useNativeDriver: true }),
         ]),

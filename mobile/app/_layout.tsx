@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AccountProvider } from '../lib/account';
 import { AuthProvider } from '../lib/auth';
 import { AuthGate } from '../screens';
-import { C } from '../theme';
+import { colors } from '../theme';
 
 export default function RootLayout() {
   return (
@@ -17,7 +17,7 @@ export default function RootLayout() {
       <AuthProvider>
         <AccountProvider>
           <AuthGate>
-            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: C.bg } }}>
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
               <Stack.Screen name="index" />
               <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
               <Stack.Screen name="vehicles/index" options={{ presentation: 'modal' }} />

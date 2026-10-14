@@ -10,9 +10,13 @@ import { useAuth } from './auth';
 import { supabase } from './supabase';
 import type { Vehicle } from './vehicles';
 
-/** 'error' matters: an empty list because the request failed is not the same
+/** Error matters: an empty list because the request failed is not the same
     as a driver with no cars, and only the second should ask for one. */
-export type LoadStatus = 'loading' | 'ready' | 'error';
+export enum LoadStatus {
+  Loading = 'loading',
+  Ready = 'ready',
+  Error = 'error',
+}
 
 type AccountState = {
   profile: api.Profile | null;
@@ -23,73 +27,73 @@ type AccountState = {
   refresh: () => Promise<void>;
 };
 
-const Ctx = createContext<AccountState | null>(null);
+const AccountContext = createContext<AccountState | null>(null);
 
 const RETRY_MS = 5_000;
 
 export function AccountProvider({ children }: { children: React.ReactNode }) {
   const { session } = useAuth();
-  const uid = session?.user.id ?? null;
+  const userId = session?.user.id ?? null;
   const [profile, setProfile] = useState<api.Profile | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [status, setStatus] = useState<LoadStatus>('loading');
+  const [status, setStatus] = useState(LoadStatus.Loading);
 
   const refresh = useCallback(async () => {
     try {
-      const [p, v] = await Promise.all([api.getProfile(), api.listVehicles()]);
-      setProfile(p);
-      setVehicles(v);
-      setStatus('ready');
-    } catch (e) {
-      setStatus('error');
-      throw e;
+      const [loadedProfile, loadedVehicles] = await Promise.all([api.getProfile(), api.listVehicles()]);
+      setProfile(loadedProfile);
+      setVehicles(loadedVehicles);
+      setStatus(LoadStatus.Ready);
+    } catch (loadError) {
+      setStatus(LoadStatus.Error);
+      throw loadError;
     }
   }, []);
 
   useEffect(() => {
-    if (!uid) {
+    if (!userId) {
       setProfile(null);
       setVehicles([]);
-      setStatus('loading');
+      setStatus(LoadStatus.Loading);
       return;
     }
     void refresh().catch(() => {});
 
     const channel = supabase
-      .channel(`profile:${uid}`)
+      .channel(`profile:${userId}`)
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${uid}` },
-        (payload) => setProfile((p) => (p ? { ...p, ...(payload.new as api.Profile) } : p)),
+        { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` },
+        (payload) => setProfile((current) => (current ? { ...current, ...(payload.new as api.Profile) } : current)),
       )
       .subscribe();
     return () => void supabase.removeChannel(channel);
-  }, [uid, refresh]);
+  }, [userId, refresh]);
 
   /* A failed load is usually a phone that lost signal for a moment. Keep
      trying quietly rather than leaving the driver with an empty garage. */
   useEffect(() => {
-    if (status !== 'error' || !uid) return;
+    if (status !== LoadStatus.Error || !userId) return;
     const timer = setTimeout(() => void refresh().catch(() => {}), RETRY_MS);
     return () => clearTimeout(timer);
-  }, [status, uid, refresh]);
+  }, [status, userId, refresh]);
 
   const value = useMemo<AccountState>(
     () => ({
       profile,
       vehicles,
-      vehicle: vehicles.find((v) => v.id === profile?.active_vehicle_id) ?? null,
+      vehicle: vehicles.find((candidate) => candidate.id === profile?.active_vehicle_id) ?? null,
       status,
       refresh,
     }),
     [profile, vehicles, status, refresh],
   );
 
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  return <AccountContext.Provider value={value}>{children}</AccountContext.Provider>;
 }
 
 export function useAccount() {
-  const v = useContext(Ctx);
-  if (!v) throw new Error('useAccount outside AccountProvider');
-  return v;
+  const context = useContext(AccountContext);
+  if (!context) throw new Error('useAccount outside AccountProvider');
+  return context;
 }

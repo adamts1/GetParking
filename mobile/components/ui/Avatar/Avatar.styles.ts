@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 
 export const styles = StyleSheet.create({
   avatar: { width: 52, height: 52, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
-  letter: { color: C.onColor, fontSize: 22, fontWeight: '700' },
+  letter: { color: colors.onColor, fontSize: 22, fontWeight: '700' },
   badge: {
     position: 'absolute',
     bottom: -2,
@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     height: 18,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: C.sheetEdge,
+    borderColor: colors.sheetEdge,
     alignItems: 'center',
     justifyContent: 'center',
   },
