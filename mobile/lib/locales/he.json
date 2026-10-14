@@ -2,10 +2,94 @@
   "home": {
     "search": "מחפש חניה",
     "leave": "מפנה חניה",
-    "noVehicle": "הוסף רכב כדי להתחיל"
+    "noVehicle": "הוסיפו רכב כדי להתחיל",
+    "credits_one": "קרדיט אחד",
+    "credits_other": "{{count}} קרדיטים",
+    "credits_two": "2 קרדיטים"
   },
   "setup": {
-    "title": "חסרה הגדרת Supabase",
-    "body": "העתק את mobile/.env.example ל־mobile/.env ומלא את הפרטים."
+    "title": "חסרה הגדרת שרת",
+    "body": "צריך להעתיק את קובץ ההגדרות לדוגמה ולמלא בו את פרטי הפרויקט. הסבר בקובץ .env.example"
+  },
+  "app": {
+    "tagline": "מוצאים חניה ממי שמפנה אותה.\nחוסכים זמן. עוזרים לאחרים."
+  },
+  "common": {
+    "cancel": "ביטול",
+    "continue": "המשך",
+    "save": "שמירה",
+    "back": "חזרה"
+  },
+  "auth": {
+    "google": "המשך עם Google",
+    "apple": "המשך עם Apple",
+    "email": "המשך עם אימייל",
+    "signIn": "כניסה",
+    "step": "שלב {{step}} מתוך 2",
+    "emailLabel": "אימייל",
+    "emailPlaceholder": "name@example.com",
+    "verifyTitle": "אימות האימייל",
+    "verifyBody": "שלחנו קוד בן 6 ספרות אל",
+    "noCode": "לא קיבלת קוד?",
+    "resend": "שליחה חוזרת",
+    "resendIn": "שליחה חוזרת בעוד {{s}} שנ׳",
+    "verify": "אימות והמשך",
+    "errors": {
+      "email": "כתובת האימייל לא תקינה",
+      "code": "הקוד שגוי או שפג תוקפו",
+      "rate": "יותר מדי ניסיונות. נסו שוב בעוד דקה",
+      "provider": "ההתחברות דרך הספק אינה זמינה כרגע",
+      "network": "אין חיבור לאינטרנט",
+      "cancelled": "",
+      "generic": "משהו השתבש. נסו שוב"
+    }
+  },
+  "vehicle": {
+    "addTitle": "הוספת רכב",
+    "addSubtitle": "כדי שהנהג השני יזהה אותך ברחוב",
+    "onboardTitle": "עוד רגע ומתחילים",
+    "onboardSubtitle": "איך יקראו לך, ואיזה רכב לחפש",
+    "nickname": "כינוי",
+    "nicknamePlaceholder": "לדוגמה דני",
+    "nicknameHint": "זה מה שהנהג השני יראה",
+    "continue": "המשך",
+    "makeModel": "יצרן ודגם",
+    "makeModelPlaceholder": "לדוגמה טויוטה קורולה",
+    "color": "צבע הרכב",
+    "plate": "ספרות אחרונות של מספר הרישוי",
+    "platePlaceholder": "לדוגמה 01",
+    "plateHint": "2 או 3 ספרות. מספיק כדי לזהות את הרכב, בלי לחשוף את כולו",
+    "plateShort": "סיומת {{digits}}",
+    "add": "הוספת רכב",
+    "skip": "דלג בינתיים",
+    "listTitle": "הרכבים שלי",
+    "addNew": "הוספת רכב חדש",
+    "delete": "מחיקה",
+    "deleteConfirm": "למחוק את {{name}}?",
+    "errors": {
+      "name": "נא למלא כינוי",
+      "makeModel": "נא למלא יצרן ודגם",
+      "plate": "נא להזין 2 או 3 ספרות"
+    },
+    "colors": {
+      "white": "לבן",
+      "black": "שחור",
+      "silver": "כסוף",
+      "red": "אדום",
+      "blue": "כחול",
+      "gray": "אפור",
+      "green": "ירוק",
+      "yellow": "צהוב"
+    }
+  },
+  "profile": {
+    "title": "הפרופיל שלי",
+    "credits": "קרדיטים",
+    "vehicles": "הרכבים שלי",
+    "signOut": "התנתקות",
+    "saved": "נשמר"
+  },
+  "errors": {
+    "unknown": "משהו השתבש. נסו שוב"
   }
 }
