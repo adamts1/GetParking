@@ -22,3 +22,14 @@ export function useAutoClear(value: unknown, clear: () => void, delayMs = 5000) 
     return () => clearTimeout(timer);
   }, [value, clear, delayMs]);
 }
+
+/** "m:ss" left until a timestamp, ticking every second; "0:00" once past. */
+export function useTimeLeft(until: string) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  const seconds = Math.max(0, Math.floor((new Date(until).getTime() - now) / 1000));
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+}

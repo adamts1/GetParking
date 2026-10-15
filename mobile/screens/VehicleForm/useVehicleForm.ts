@@ -4,9 +4,9 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAccount } from '../../lib/account';
 import * as api from '../../lib/api';
-import { suggestedNickname, useAuth } from '../../lib/auth';
+import { suggestedNickname } from '../../lib/auth';
+import { useAccount, useAuth } from '../../providers';
 import { CarColor, PLATE_DIGITS_RE } from '../../lib/vehicles';
 import type { VehicleFormProps } from './VehicleForm';
 

@@ -5,10 +5,10 @@
    profile row is followed over Realtime rather than refetched on a timer. */
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import * as api from './api';
-import { useAuth } from './auth';
-import { supabase } from './supabase';
-import type { Vehicle } from './vehicles';
+import * as api from '../lib/api';
+import { useAuth } from './AuthProvider';
+import { supabase } from '../lib/supabase';
+import type { Vehicle } from '../lib/vehicles';
 
 /** Error matters: an empty list because the request failed is not the same
     as a driver with no cars, and only the second should ask for one. */

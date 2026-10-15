@@ -3,8 +3,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
-import { LoadStatus, useAccount } from '../../lib/account';
-import { AuthStatus, useAuth } from '../../lib/auth';
+import { AuthStatus, LoadStatus, useAccount, useAuth } from '../../providers';
 import { isConfigured } from '../../lib/supabase';
 
 const SKIP_KEY = 'getparking.skipped-add-car';

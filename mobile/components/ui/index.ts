@@ -7,7 +7,7 @@
 export { ActionRow, ActionTile } from './ActionTile';
 export { usePulse, useRadarRings, useSpin, useFloat } from './animations';
 export { Avatar } from './Avatar';
-export { BottomSheet, SheetHeightProvider, useSheetHeight } from './BottomSheet';
+export { BottomSheet, SheetHeightProvider, useReportSheetHeight, useSheetHeight } from './BottomSheet';
 export { BrandMark } from './BrandMark';
 export { Button } from './Button';
 export { Chip } from './Chip';

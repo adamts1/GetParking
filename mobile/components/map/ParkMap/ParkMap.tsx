@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import type { LatLng } from '../../../lib/geo';
 import { colors } from '../../../theme';
-import { GlassCard, Icon, IconName } from '../../ui';
+import { GlassCard, Icon, IconName, useSheetHeight } from '../../ui';
 import { UserDot } from '../markers';
 import { darkMapStyle } from './mapStyle';
 import { styles } from './ParkMap.styles';
@@ -15,14 +15,16 @@ type Props = {
   me: LatLng | null;
   /** Compass bearing, for the cone on my own marker. */
   heading: number | null;
-  /** How much of the map's bottom is covered by the controls above it. */
-  bottomInset: number;
+  /** Radar ring colour while the driver is waiting for a match. */
+  radar: string | null;
   locateLabel: string;
 };
 
 const toCoordinate = (point: LatLng) => ({ latitude: point.lat, longitude: point.lng });
 
-export function ParkMap({ me, heading, bottomInset, locateLabel }: Props) {
+export function ParkMap({ me, heading, radar, locateLabel }: Props) {
+  // However tall the panel at the bottom currently is — see SheetHeightProvider.
+  const bottomInset = useSheetHeight();
   const { map, initialRegion, following, recenter, onMapReady, onPanDrag, onRegionChangeComplete } = useParkMap([me]);
 
   return (
@@ -53,10 +55,10 @@ export function ParkMap({ me, heading, bottomInset, locateLabel }: Props) {
             /* Android rasterises a custom marker once; one that turns has to
                ask for redraws. The bearing is rounded upstream to keep that
                from running wild. */
-            tracksViewChanges={heading != null}
+            tracksViewChanges={!!radar || heading != null}
             zIndex={10}
           >
-            <UserDot heading={heading} />
+            <UserDot heading={heading} radar={radar} />
           </Marker>
         ) : null}
       </MapView>

@@ -24,13 +24,18 @@ export function SheetHeightProvider({ children }: { children: React.ReactNode })
 
 export const useSheetHeight = () => useContext(SheetHeightContext).height;
 
+/** onLayout for whatever covers the bottom of the map — a sheet, or the
+    home screen's buttons — so the map knows how much of it is hidden. */
+export function useReportSheetHeight() {
+  const { report } = useContext(SheetHeightContext);
+  return (event: LayoutChangeEvent) => report(Math.round(event.nativeEvent.layout.height));
+}
+
 /** The panel at the bottom of every map screen. It does not drag — the
     content changes with the flow, so there is nothing to expand into. */
 export function BottomSheet({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
-  const { report } = useContext(SheetHeightContext);
-
-  const onLayout = (event: LayoutChangeEvent) => report(Math.round(event.nativeEvent.layout.height));
+  const onLayout = useReportSheetHeight();
 
   return (
     <View style={styles.wrap} pointerEvents="box-none" onLayout={onLayout}>
