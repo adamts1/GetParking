@@ -1,4 +1,4 @@
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import { colors } from '../../../theme';
 import { useSpin } from '../animations';
 import { styles } from './Spinner.styles';

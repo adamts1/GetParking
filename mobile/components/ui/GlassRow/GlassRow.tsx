@@ -1,5 +1,5 @@
-import { I18nManager, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, radius } from '../../../theme';
+import { I18nManager, Pressable, Text, View } from 'react-native';
+import { colors } from '../../../theme';
 import { Icon, IconName } from '../Icons';
 import { styles } from './GlassRow.styles';
 

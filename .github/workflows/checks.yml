@@ -1,0 +1,56 @@
+# Runs on every pull request (and on main after a merge): the app must
+# typecheck and lint cleanly, and the database migrations must apply and pass
+# the scenario test on a throwaway Postgres + PostGIS.
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mobile:
+    name: Mobile – typecheck & lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      # --legacy-peer-deps: an optional react-dom peer of Expo's devtools does
+      # not match react-native's pinned react; it is never loaded on mobile.
+      - run: npm ci --legacy-peer-deps
+      - run: npx tsc --noEmit
+      - run: npx eslint . --max-warnings 0
+
+  database:
+    name: Database – migrations & scenarios
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh supabase/tests/run_local.sh
