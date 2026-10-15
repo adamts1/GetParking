@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 
 export const styles = StyleSheet.create({
   chip: {
@@ -11,10 +11,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: C.glass,
+    backgroundColor: colors.glass,
     borderWidth: 1,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
   dot: { width: 6, height: 6, borderRadius: 3 },
-  text: { color: C.textSecondary, fontSize: 12 },
+  text: { color: colors.textSecondary, fontSize: 12 },
 });

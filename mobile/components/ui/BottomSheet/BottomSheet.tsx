@@ -11,7 +11,7 @@ import { styles } from './BottomSheet.styles';
    button sits and how far the camera is pushed up so the pins clear the
    sheet. The sheets differ in height — a match sheet is half the screen, the
    idle one a fifth — so the sheet measures itself and the map reads it. */
-const SheetHeightContext = createContext<{ height: number; report: (h: number) => void }>({
+const SheetHeightContext = createContext<{ height: number; report: (height: number) => void }>({
   height: SHEET_INSET.compact,
   report: () => {},
 });
@@ -30,7 +30,7 @@ export function BottomSheet({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
   const { report } = useContext(SheetHeightContext);
 
-  const onLayout = (e: LayoutChangeEvent) => report(Math.round(e.nativeEvent.layout.height));
+  const onLayout = (event: LayoutChangeEvent) => report(Math.round(event.nativeEvent.layout.height));
 
   return (
     <View style={styles.wrap} pointerEvents="box-none" onLayout={onLayout}>

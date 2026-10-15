@@ -9,7 +9,7 @@ import { signOut } from '../../lib/auth';
 import { useAutoClear } from '../../lib/hooks';
 
 export function useProfileScreen() {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
   const { profile, refresh } = useAccount();
   const [name, setName] = useState(profile?.nickname ?? '');
   const [saving, setSaving] = useState(false);
@@ -28,7 +28,7 @@ export function useProfileScreen() {
   const save = async () => {
     if (!profile) return;
     if (!name.trim()) {
-      setNameError(t('vehicle.errors.name'));
+      setNameError(translate('vehicle.errors.name'));
       return;
     }
     setNameError(null);
@@ -38,7 +38,7 @@ export function useProfileScreen() {
       await refresh();
       setSaved(true);
     } catch {
-      Alert.alert(t('errors.unknown'));
+      Alert.alert(translate('errors.unknown'));
     } finally {
       setSaving(false);
     }

@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { C, R } from '../../../theme';
+import { colors, radius } from '../../../theme';
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: C.card,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: C.glassBorder,
-    borderRadius: R.xl,
+    borderColor: colors.glassBorder,
+    borderRadius: radius.xl,
     overflow: 'hidden',
   },
 });

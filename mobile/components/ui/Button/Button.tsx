@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { ActivityIndicator, Pressable, Text, View, type StyleProp, type ViewStyle } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 import { Icon, type IconName } from '../Icons';
 import { styles } from './Button.styles';
 
@@ -17,13 +17,13 @@ type Props = {
 };
 
 /** The filled, glowing call to action. */
-export function Button({ label, onPress, icon, color = C.primary, large, disabled, loading, style }: Props) {
-  const off = disabled || loading;
+export function Button({ label, onPress, icon, color = colors.primary, large, disabled, loading, style }: Props) {
+  const inactive = disabled || loading;
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ disabled: !!off, busy: !!loading }}
-      disabled={off}
+      accessibilityState={{ disabled: !!inactive, busy: !!loading }}
+      disabled={inactive}
       onPress={() => {
         void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         onPress?.();
@@ -31,7 +31,7 @@ export function Button({ label, onPress, icon, color = C.primary, large, disable
       style={({ pressed }) => [
         styles.button,
         large && styles.large,
-        off
+        inactive
           ? styles.disabled
           : {
               backgroundColor: color,
@@ -45,11 +45,11 @@ export function Button({ label, onPress, icon, color = C.primary, large, disable
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={C.onColor} />
+        <ActivityIndicator color={colors.onColor} />
       ) : (
         <View style={styles.content}>
-          {icon ? <Icon name={icon} size={large ? 20 : 18} color={off ? C.textTertiary : C.onColor} /> : null}
-          <Text style={[styles.label, large && styles.largeLabel, off && styles.disabledLabel]}>{label}</Text>
+          {icon ? <Icon name={icon} size={large ? 20 : 18} color={inactive ? colors.textTertiary : colors.onColor} /> : null}
+          <Text style={[styles.label, large && styles.largeLabel, inactive && styles.disabledLabel]}>{label}</Text>
         </View>
       )}
     </Pressable>

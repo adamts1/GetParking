@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, SPACE, start } from '../../theme';
+import { colors, SPACE, start } from '../../theme';
 
 export const styles = StyleSheet.create({
   content: { paddingHorizontal: SPACE.lg },
@@ -10,19 +10,19 @@ export const styles = StyleSheet.create({
     padding: SPACE.lg,
     borderRadius: 18,
     marginBottom: 10,
-    backgroundColor: C.glass,
+    backgroundColor: colors.glass,
     borderWidth: 1.5,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
-  selected: { backgroundColor: C.primaryWash, borderColor: C.primaryLine },
+  selected: { backgroundColor: colors.primaryWash, borderColor: colors.primaryLine },
   icon: { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  name: { color: C.text, fontSize: 15, fontWeight: '600', textAlign: start },
-  detail: { color: C.textSecondary, fontSize: 13, textAlign: start },
+  name: { color: colors.text, fontSize: 15, fontWeight: '600', textAlign: start },
+  detail: { color: colors.textSecondary, fontSize: 13, textAlign: start },
   check: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: C.primary,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
     marginTop: 6,
     borderWidth: 1.5,
     borderStyle: 'dashed',
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
-  addLabel: { color: C.textSecondary, fontSize: 15, fontWeight: '500' },
+  addLabel: { color: colors.textSecondary, fontSize: 15, fontWeight: '500' },
 });

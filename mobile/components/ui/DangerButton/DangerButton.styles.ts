@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
-import { C, R } from '../../../theme';
+import { colors, radius } from '../../../theme';
 
 export const styles = StyleSheet.create({
   button: {
-    borderRadius: R.md,
+    borderRadius: radius.md,
     paddingVertical: 14,
     alignItems: 'center',
-    backgroundColor: C.dangerWash,
+    backgroundColor: colors.dangerWash,
     borderWidth: 1,
-    borderColor: C.dangerLine,
+    borderColor: colors.dangerLine,
   },
-  label: { color: C.danger, fontSize: 15, fontWeight: '600' },
+  label: { color: colors.danger, fontSize: 15, fontWeight: '600' },
 });

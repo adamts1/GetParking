@@ -38,11 +38,11 @@ export async function listVehicles(): Promise<Vehicle[]> {
 /** Adds a car and returns its id. */
 export async function addVehicle(
   userId: string,
-  v: Pick<Vehicle, 'make_model' | 'color' | 'plate_last_digits'>,
+  vehicle: Pick<Vehicle, 'make_model' | 'color' | 'plate_last_digits'>,
 ): Promise<string> {
   const { data, error } = await supabase
     .from('vehicles')
-    .insert({ user_id: userId, ...v })
+    .insert({ user_id: userId, ...vehicle })
     .select('id')
     .single();
   if (error) throw error;

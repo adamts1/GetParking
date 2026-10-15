@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, R } from '../../../theme';
+import { colors, radius } from '../../../theme';
 
 export const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 },
@@ -10,13 +10,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 12,
-    backgroundColor: C.glass,
+    backgroundColor: colors.glass,
     borderWidth: 1.5,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
-  swatch: { width: 20, height: 20, borderRadius: R.sm - 4 },
+  swatch: { width: 20, height: 20, borderRadius: radius.sm - 4 },
   // White on a dark sheet needs an outline to read as a swatch at all.
   whiteSwatch: { borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
-  label: { color: C.textSecondary, fontSize: 13 },
-  selectedLabel: { color: C.text, fontWeight: '600' },
+  label: { color: colors.textSecondary, fontSize: 13 },
+  selectedLabel: { color: colors.text, fontWeight: '600' },
 });

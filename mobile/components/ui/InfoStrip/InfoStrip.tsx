@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { alpha, C, start, type Accent } from '../../../theme';
+import { alpha, colors, start, type Accent } from '../../../theme';
 import { Icon, type IconName } from '../Icons';
 import { styles } from './InfoStrip.styles';
 

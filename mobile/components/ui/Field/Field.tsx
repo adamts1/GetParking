@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Text, TextInput, View, type TextInputProps } from 'react-native';
-import { C, s } from '../../../theme';
+import { colors, sharedStyles } from '../../../theme';
 import { Icon, type IconName } from '../Icons';
 import { styles } from './Field.styles';
 
@@ -19,22 +19,22 @@ export const Field = forwardRef<TextInput, Props>(function Field(
 ) {
   return (
     <View style={styles.wrap}>
-      {label ? <Text style={s.label}>{label}</Text> : null}
+      {label ? <Text style={sharedStyles.label}>{label}</Text> : null}
       <View style={[styles.box, error ? styles.invalid : null]}>
-        {icon ? <Icon name={icon} size={18} color={C.textTertiary} /> : null}
+        {icon ? <Icon name={icon} size={18} color={colors.textTertiary} /> : null}
         <TextInput
           ref={ref}
-          placeholderTextColor={C.textTertiary}
-          selectionColor={C.primary}
+          placeholderTextColor={colors.textTertiary}
+          selectionColor={colors.primary}
           accessibilityLabel={label}
           style={[styles.input, style]}
           {...props}
         />
       </View>
       {error ? (
-        <Text style={[s.caption, styles.note, styles.error]}>{error}</Text>
+        <Text style={[sharedStyles.caption, styles.note, styles.error]}>{error}</Text>
       ) : hint ? (
-        <Text style={[s.caption, styles.note]}>{hint}</Text>
+        <Text style={[sharedStyles.caption, styles.note]}>{hint}</Text>
       ) : null}
     </View>
   );

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, start } from '../../../theme';
+import { colors, start } from '../../../theme';
 
 export const styles = StyleSheet.create({
   strip: {
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   badge: { width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   letter: { fontWeight: '800', fontSize: 14 },
   text: { flex: 1 },
-  title: { color: C.text, fontSize: 13, fontWeight: '600', textAlign: start },
-  subtitle: { color: C.textTertiary, fontSize: 11, textAlign: start },
+  title: { color: colors.text, fontSize: 13, fontWeight: '600', textAlign: start },
+  subtitle: { color: colors.textTertiary, fontSize: 11, textAlign: start },
   note: { fontSize: 12, fontWeight: '600' },
 });

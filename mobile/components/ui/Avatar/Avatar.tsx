@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 import { Icon, type IconName } from '../Icons';
 import { styles } from './Avatar.styles';
 
@@ -17,7 +17,7 @@ export function Avatar({ letter, color, badge }: Props) {
       <Text style={styles.letter}>{letter.toUpperCase()}</Text>
       {badge ? (
         <View style={[styles.badge, { backgroundColor: color }]}>
-          <Icon name={badge} size={10} color={C.onColor} />
+          <Icon name={badge} size={10} color={colors.onColor} />
         </View>
       ) : null}
     </View>

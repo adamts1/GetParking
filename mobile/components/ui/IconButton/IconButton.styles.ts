@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 
 export const styles = StyleSheet.create({
   button: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: C.glass,
+    backgroundColor: colors.glass,
     borderWidth: 1,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },

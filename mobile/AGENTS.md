@@ -39,3 +39,9 @@ Docs: https://docs.expo.dev/eas/index.md
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
 - Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
 - Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+
+## Code style
+
+- **No single-letter or abbreviated names.** A name says what it holds: `sharedStyles`, not `s`; `translate`, not `t` (`const { t: translate } = useTranslation()`); `error`, not `e`; `index`, not `i`. Spacing/size tokens (`SPACE.sm`, `radius.lg`) and real words (`row`, `gap`) are fine.
+- **Enums, not string literals, for our own sets of values** — states, kinds, providers, colours, icon names (`IconName.Car`, `GateState.Ready`, `CarColor.White`). String values stay readable in the database and in logs (`CarColor.White = 'white'`).
+  Exceptions: translation keys, and values whose type a library defines (`Platform.OS === 'ios'`, `accessibilityRole="button"`).

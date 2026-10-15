@@ -8,11 +8,17 @@ import { authErrorKey, EMAIL_RE, sendEmailCode, verifyEmailCode } from '../../li
 import { useCountdown } from '../../lib/hooks';
 
 export const CODE_LENGTH = 6;
+
+/** Numbered as shown to the driver: "step 1 of 2". */
+export enum EmailStep {
+  Address = 1,
+  Code = 2,
+}
 const RESEND_SECONDS = 30;
 
 export function useEmailAuthScreen() {
-  const { t } = useTranslation();
-  const [step, setStep] = useState<1 | 2>(1);
+  const { t: translate } = useTranslation();
+  const [step, setStep] = useState(EmailStep.Address);
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
@@ -23,7 +29,7 @@ export function useEmailAuthScreen() {
 
   const send = async () => {
     if (!EMAIL_RE.test(email.trim())) {
-      setEmailError(t('auth.errors.email'));
+      setEmailError(translate('auth.errors.email'));
       return;
     }
     setEmailError(null);
@@ -31,12 +37,12 @@ export function useEmailAuthScreen() {
     setError(null);
     try {
       await sendEmailCode(email);
-      setStep(2);
+      setStep(EmailStep.Code);
       setCode('');
       setResendIn(RESEND_SECONDS);
       setTimeout(() => codeInput.current?.focus(), 300);
-    } catch (e) {
-      setError(t(authErrorKey(e)));
+    } catch (requestError) {
+      setError(translate(authErrorKey(requestError)));
     } finally {
       setBusy(false);
     }
@@ -49,8 +55,8 @@ export function useEmailAuthScreen() {
     try {
       await verifyEmailCode(email, value);
       // The gate swaps this screen out; leave the spinner on until it does.
-    } catch (e) {
-      setError(t(authErrorKey(e)));
+    } catch (requestError) {
+      setError(translate(authErrorKey(requestError)));
       setCode('');
       setBusy(false);
     }
@@ -59,7 +65,7 @@ export function useEmailAuthScreen() {
   return {
     step,
     back: () => {
-      setStep(1);
+      setStep(EmailStep.Address);
       setError(null);
     },
     email,

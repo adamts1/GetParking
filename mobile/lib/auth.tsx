@@ -12,13 +12,21 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { isConfigured, supabase } from './supabase';
 
-type AuthState = { status: 'loading' | 'in' | 'out'; session: AuthSession | null };
+export enum AuthStatus {
+  Loading = 'loading',
+  SignedIn = 'signed-in',
+  SignedOut = 'signed-out',
+}
 
-const Ctx = createContext<AuthState>({ status: 'loading', session: null });
+type AuthState = { status: AuthStatus; session: AuthSession | null };
+
+const AuthContext = createContext<AuthState>({ status: AuthStatus.Loading, session: null });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>(
-    isConfigured ? { status: 'loading', session: null } : { status: 'out', session: null },
+    isConfigured
+      ? { status: AuthStatus.Loading, session: null }
+      : { status: AuthStatus.SignedOut, session: null },
   );
 
   useEffect(() => {
@@ -26,10 +34,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let live = true;
     void supabase.auth
       .getSession()
-      .then(({ data }) => live && setState({ status: data.session ? 'in' : 'out', session: data.session }))
-      .catch(() => live && setState({ status: 'out', session: null }));
+      .then(({ data }) => live && setState({ status: data.session ? AuthStatus.SignedIn : AuthStatus.SignedOut, session: data.session }))
+      .catch(() => live && setState({ status: AuthStatus.SignedOut, session: null }));
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (live) setState({ status: session ? 'in' : 'out', session });
+      if (live) setState({ status: session ? AuthStatus.SignedIn : AuthStatus.SignedOut, session });
     });
     return () => {
       live = false;
@@ -37,10 +45,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  return <Ctx.Provider value={state}>{children}</Ctx.Provider>;
+  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
 }
 
-export const useAuth = () => useContext(Ctx);
+export const useAuth = () => useContext(AuthContext);
 
 /** The first name a provider gave us, as a starting nickname. */
 export function suggestedNickname(session: AuthSession | null): string {
@@ -84,25 +92,25 @@ export async function signInWithApple() {
   // Apple signs a hash of the nonce; Supabase checks it against the raw one.
   const rawNonce = Crypto.randomUUID();
   const hashedNonce = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, rawNonce);
-  const cred = await AppleAuthentication.signInAsync({
+  const credential = await AppleAuthentication.signInAsync({
     requestedScopes: [
       AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
       AppleAuthentication.AppleAuthenticationScope.EMAIL,
     ],
     nonce: hashedNonce,
   });
-  if (!cred.identityToken) throw new Error('apple: no identity token');
+  if (!credential.identityToken) throw new Error('apple: no identity token');
 
   const { error } = await supabase.auth.signInWithIdToken({
     provider: 'apple',
-    token: cred.identityToken,
+    token: credential.identityToken,
     nonce: rawNonce,
   });
   if (error) throw error;
 
   // Apple sends the name only on the very first sign-in, and not in the token.
   // Kept in auth metadata so onboarding can offer it as the nickname.
-  const given = cred.fullName?.givenName?.trim();
+  const given = credential.fullName?.givenName?.trim();
   if (given) await supabase.auth.updateUser({ data: { given_name: given } }).catch(() => {});
 }
 
@@ -122,15 +130,15 @@ const CANCELLED = new Set(['ERR_REQUEST_CANCELED', 'SIGN_IN_CANCELLED', '-5', '1
 const MISCONFIGURED = new Set(['DEVELOPER_ERROR', '10', 'PLAY_SERVICES_NOT_AVAILABLE', '12500']);
 
 /** Supabase and the native sheets report failures in English. Map the ones a driver can act on. */
-export function authErrorKey(err: unknown): string {
-  const msg = err instanceof Error ? err.message : String((err as { message?: unknown })?.message ?? err);
-  const code = String((err as { code?: unknown })?.code ?? '');
-  if (CANCELLED.has(code) || /cancel/i.test(msg)) return 'auth.errors.cancelled';
-  if (MISCONFIGURED.has(code) || /developer_error|audience|invalid.*client/i.test(msg)) {
+export function authErrorKey(error: unknown): string {
+  const message = error instanceof Error ? error.message : String((error as { message?: unknown })?.message ?? error);
+  const code = String((error as { code?: unknown })?.code ?? '');
+  if (CANCELLED.has(code) || /cancel/i.test(message)) return 'auth.errors.cancelled';
+  if (MISCONFIGURED.has(code) || /developer_error|audience|invalid.*client/i.test(message)) {
     return 'auth.errors.provider';
   }
-  if (/expired|invalid.*(otp|token)|otp.*invalid/i.test(msg)) return 'auth.errors.code';
-  if (/rate limit|too many|after \d+ seconds/i.test(msg)) return 'auth.errors.rate';
-  if (/network|fetch/i.test(msg)) return 'auth.errors.network';
+  if (/expired|invalid.*(otp|token)|otp.*invalid/i.test(message)) return 'auth.errors.code';
+  if (/rate limit|too many|after \d+ seconds/i.test(message)) return 'auth.errors.rate';
+  if (/network|fetch/i.test(message)) return 'auth.errors.network';
   return 'auth.errors.generic';
 }

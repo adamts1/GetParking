@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from 'react-native';
-import { C } from '../../../theme';
+import { colors } from '../../../theme';
 import { Icon, type IconName } from '../Icons';
 import { styles } from './ActionTile.styles';
 
@@ -13,7 +13,7 @@ type Props = {
 
 /** Icon over caption, in a glass square — call, message, cancel. */
 export function ActionTile({ icon, label, onPress, danger, disabled }: Props) {
-  const color = danger ? C.danger : C.textSecondary;
+  const color = danger ? colors.danger : colors.textSecondary;
   return (
     <Pressable
       accessibilityRole="button"

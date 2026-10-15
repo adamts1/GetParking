@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { C, R } from '../../../theme';
+import { colors, radius } from '../../../theme';
 
 export const styles = StyleSheet.create({
   tile: {
@@ -7,12 +7,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     paddingVertical: 12,
-    borderRadius: R.md,
-    backgroundColor: C.glass,
+    borderRadius: radius.md,
+    backgroundColor: colors.glass,
     borderWidth: 1,
-    borderColor: C.glassBorder,
+    borderColor: colors.glassBorder,
   },
-  danger: { backgroundColor: C.dangerWash, borderColor: C.dangerLine },
+  danger: { backgroundColor: colors.dangerWash, borderColor: colors.dangerLine },
   label: { fontSize: 12, fontWeight: '500' },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
 });
