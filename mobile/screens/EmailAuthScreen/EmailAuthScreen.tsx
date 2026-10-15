@@ -11,7 +11,7 @@ type Props = { onBack: () => void };
 export function EmailAuthScreen({ onBack }: Props) {
   const { t: translate } = useTranslation();
   const insets = useSafeAreaInsets();
-  const form = useEmailAuthScreen();
+  const { codeInput, ...form } = useEmailAuthScreen();
 
   return (
     <KeyboardAvoidingView style={sharedStyles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -71,7 +71,7 @@ export function EmailAuthScreen({ onBack }: Props) {
                 <Text style={styles.email}>{form.email.trim()}</Text>
               </Text>
 
-              <Pressable onPress={() => form.codeInput.current?.focus()} style={styles.codeRow}>
+              <Pressable onPress={form.focusCode} style={styles.codeRow}>
                 {Array.from({ length: CODE_LENGTH }, (_slot, index) => (
                   <View key={index} style={[styles.codeBox, index === form.code.length && styles.codeBoxActive]}>
                     <Text style={styles.codeDigit}>{form.code[index] ?? ''}</Text>
@@ -79,7 +79,7 @@ export function EmailAuthScreen({ onBack }: Props) {
                 ))}
               </Pressable>
               <TextInput
-                ref={form.codeInput}
+                ref={codeInput}
                 value={form.code}
                 onChangeText={form.onCodeChange}
                 keyboardType="number-pad"

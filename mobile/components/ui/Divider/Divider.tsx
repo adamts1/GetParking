@@ -1,5 +1,4 @@
 import { Text, View } from 'react-native';
-import { colors } from '../../../theme';
 import { styles } from './Divider.styles';
 
 /** A labelled rule — "or". */

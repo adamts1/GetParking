@@ -31,44 +31,70 @@ const AccountContext = createContext<AccountState | null>(null);
 
 const RETRY_MS = 5_000;
 
+type Loaded = {
+  /** Whose data this is. A different (or no) signed-in user means it is stale. */
+  userId: string;
+  profile: api.Profile | null;
+  vehicles: Vehicle[];
+  status: LoadStatus;
+};
+
+async function loadAccount(userId: string): Promise<Loaded> {
+  const [profile, vehicles] = await Promise.all([api.getProfile(), api.listVehicles()]);
+  return { userId, profile, vehicles, status: LoadStatus.Ready };
+}
+
 export function AccountProvider({ children }: { children: React.ReactNode }) {
   const { session } = useAuth();
   const userId = session?.user.id ?? null;
-  const [profile, setProfile] = useState<api.Profile | null>(null);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [status, setStatus] = useState(LoadStatus.Loading);
+  const [loaded, setLoaded] = useState<Loaded | null>(null);
+
+  /* Data loaded for someone else is ignored rather than cleared: signing out
+     or switching accounts then needs no effect that resets state. */
+  const current = loaded && loaded.userId === userId ? loaded : null;
+  const profile = current?.profile ?? null;
+  const vehicles = useMemo(() => current?.vehicles ?? [], [current]);
+  const status = current?.status ?? LoadStatus.Loading;
+
+  const failed = useCallback(
+    (forUser: string) =>
+      setLoaded((previous) =>
+        previous?.userId === forUser
+          ? { ...previous, status: LoadStatus.Error }
+          : { userId: forUser, profile: null, vehicles: [], status: LoadStatus.Error },
+      ),
+    [],
+  );
 
   const refresh = useCallback(async () => {
+    if (!userId) return;
     try {
-      const [loadedProfile, loadedVehicles] = await Promise.all([api.getProfile(), api.listVehicles()]);
-      setProfile(loadedProfile);
-      setVehicles(loadedVehicles);
-      setStatus(LoadStatus.Ready);
+      setLoaded(await loadAccount(userId));
     } catch (loadError) {
-      setStatus(LoadStatus.Error);
+      failed(userId);
       throw loadError;
     }
-  }, []);
+  }, [userId, failed]);
 
   useEffect(() => {
-    if (!userId) {
-      setProfile(null);
-      setVehicles([]);
-      setStatus(LoadStatus.Loading);
-      return;
-    }
-    void refresh().catch(() => {});
+    if (!userId) return;
+    loadAccount(userId).then(setLoaded, () => failed(userId));
 
     const channel = supabase
       .channel(`profile:${userId}`)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` },
-        (payload) => setProfile((current) => (current ? { ...current, ...(payload.new as api.Profile) } : current)),
+        (payload) =>
+          setLoaded((previous) =>
+            previous?.userId === userId && previous.profile
+              ? { ...previous, profile: { ...previous.profile, ...(payload.new as api.Profile) } }
+              : previous,
+          ),
       )
       .subscribe();
     return () => void supabase.removeChannel(channel);
-  }, [userId, refresh]);
+  }, [userId, failed]);
 
   /* A failed load is usually a phone that lost signal for a moment. Keep
      trying quietly rather than leaving the driver with an empty garage. */

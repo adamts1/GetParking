@@ -1,5 +1,5 @@
-import { I18nManager, StyleSheet, Text, View } from 'react-native';
-import { alpha, colors, SPACE } from '../../../theme';
+import { I18nManager, Text, View } from 'react-native';
+import { alpha, colors } from '../../../theme';
 import { Icon, IconName } from '../Icons';
 import { styles } from './ContextBadge.styles';
 

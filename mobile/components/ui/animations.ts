@@ -1,10 +1,11 @@
 /* The animations the UI primitives share. Kept apart from the views so a
    component file says what it draws, not how a value is driven over time. */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, Easing } from 'react-native';
 
-const useValue = (initial: number) => useRef(new Animated.Value(initial)).current;
+// Created once and kept for the component's life; state, not a ref, so it can be read while rendering.
+const useValue = (initial: number) => useState(() => new Animated.Value(initial))[0];
 
 /** Breathes between full and dim — a live status dot. */
 export function usePulse(active: boolean | undefined, duration = 700) {

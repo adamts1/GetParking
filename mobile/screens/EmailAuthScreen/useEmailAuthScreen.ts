@@ -73,6 +73,7 @@ export function useEmailAuthScreen() {
     emailError,
     code,
     codeInput,
+    focusCode: () => codeInput.current?.focus(),
     onCodeChange: (value: string) => {
       const digits = value.replace(/\D/g, '').slice(0, CODE_LENGTH);
       setCode(digits);

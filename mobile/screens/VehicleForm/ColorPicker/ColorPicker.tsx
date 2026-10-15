@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { alpha, colors, radius } from '../../../theme';
+import { Pressable, Text, View } from 'react-native';
+import { alpha } from '../../../theme';
 import { CAR_COLOR_KEYS, CAR_COLORS, CarColor } from '../../../lib/vehicles';
 import { styles } from './ColorPicker.styles';
 

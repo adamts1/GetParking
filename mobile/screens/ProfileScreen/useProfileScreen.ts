@@ -1,6 +1,6 @@
 /* Editing the nickname, reaching the garage, signing out. */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 import { useAccount } from '../../lib/account';
@@ -11,15 +11,13 @@ import { useAutoClear } from '../../lib/hooks';
 export function useProfileScreen() {
   const { t: translate } = useTranslation();
   const { profile, refresh } = useAccount();
-  const [name, setName] = useState(profile?.nickname ?? '');
+  // Null until the driver edits the field, so it follows the profile as it
+  // arrives (and changes) without an effect copying it over.
+  const [draft, setDraft] = useState<string | null>(null);
+  const name = draft ?? profile?.nickname ?? '';
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
-
-  // The profile arrives (and changes) asynchronously; follow it.
-  useEffect(() => {
-    setName(profile?.nickname ?? '');
-  }, [profile?.nickname]);
 
   useAutoClear(saved, () => setSaved(false), 2000);
 
@@ -36,6 +34,7 @@ export function useProfileScreen() {
     try {
       await api.updateNickname(profile.id, name.trim());
       await refresh();
+      setDraft(null);
       setSaved(true);
     } catch {
       Alert.alert(translate('errors.unknown'));
@@ -47,7 +46,7 @@ export function useProfileScreen() {
   return {
     credits: profile?.credits_balance ?? 0,
     name,
-    setName,
+    setName: setDraft,
     nameError,
     dirty,
     saving,
