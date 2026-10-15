@@ -14,7 +14,8 @@ export const styles = StyleSheet.create({
   content: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   label: { color: colors.onColor, fontSize: 15, fontWeight: '700', letterSpacing: 0.3 },
   largeLabel: { fontSize: 17 },
-  disabled: { backgroundColor: colors.track },
+  // Opaque enough to read over the map, not only over the plain background.
+  disabled: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.glassBorder },
   disabledLabel: { color: colors.textTertiary },
   pressed: { opacity: 0.85, transform: [{ scale: 0.98 }] },
 });
