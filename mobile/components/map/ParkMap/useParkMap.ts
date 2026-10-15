@@ -1,7 +1,7 @@
 /* Keeping the map pointed at the right things.
 
-   The map follows what is on it — for now just the driver — until the driver
-   pans away; then it stays put until they tap locate. The view component only
+   The map follows what is on it — the driver, and while matched the other
+   car and the spot — until the driver pans away; then it stays put until they tap locate. The view component only
    renders; every decision about the camera is here. */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
