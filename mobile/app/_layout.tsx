@@ -5,7 +5,7 @@ import '../lib/i18n';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { AccountProvider, AuthProvider, LocationProvider, SessionProvider } from '../providers';
+import { AccountProvider, AuthProvider, LiveTrackingProvider, LocationProvider, SessionProvider } from '../providers';
 import { AuthGate } from '../screens';
 import { colors } from '../theme';
 
@@ -20,14 +20,17 @@ export default function RootLayout() {
               itself. */}
           <AuthGate>
             <LocationProvider>
-              {/* Inside Location because an open session reports position. */}
+              {/* Inside Location because an open session reports position; live tracking
+                  sits inside Session because it follows the match. */}
               <SessionProvider>
-                <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
-                  <Stack.Screen name="index" />
-                  <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
-                  <Stack.Screen name="vehicles/index" options={{ presentation: 'modal' }} />
-                  <Stack.Screen name="vehicles/new" options={{ presentation: 'modal' }} />
-                </Stack>
+                <LiveTrackingProvider>
+                  <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
+                    <Stack.Screen name="vehicles/index" options={{ presentation: 'modal' }} />
+                    <Stack.Screen name="vehicles/new" options={{ presentation: 'modal' }} />
+                  </Stack>
+                </LiveTrackingProvider>
               </SessionProvider>
             </LocationProvider>
           </AuthGate>

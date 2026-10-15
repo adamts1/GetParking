@@ -12,11 +12,16 @@ type Props = {
   /** The other driver's side — the avatar's colour. */
   avatarColor: string;
   badge: IconName;
+  /** How far the searcher is from the spot, and what that number means. */
+  distance?: string;
+  distanceCaption?: string;
+  /** The colour of the distance: this driver's own side. */
+  accent?: string;
 };
 
 /** Who the other driver is and what to look for in the street: colour, car,
     and the plate's last digits. Both match sheets show this row. */
-export function CounterpartRow({ counterpart, verb, avatarColor, badge }: Props) {
+export function CounterpartRow({ counterpart, verb, avatarColor, badge, distance, distanceCaption, accent }: Props) {
   const { t: translate } = useTranslation();
   const name = counterpart?.nickname || translate('matched.unknownDriver');
   const carText = counterpart
@@ -44,6 +49,12 @@ export function CounterpartRow({ counterpart, verb, avatarColor, badge }: Props)
           </View>
         ) : null}
       </View>
+      {distance ? (
+        <View style={styles.distance}>
+          <Text style={[styles.distanceValue, accent ? { color: accent } : null]}>{distance}</Text>
+          <Text style={styles.distanceCaption}>{distanceCaption}</Text>
+        </View>
+      ) : null}
     </View>
   );
 }
