@@ -5,6 +5,7 @@
    The routes in app/ do nothing but pick one of these. */
 
 export { AuthGate } from './AuthGate';
+export { HomeScreen } from './HomeScreen';
 export { ProfileScreen } from './ProfileScreen';
 export { VehicleForm } from './VehicleForm';
 export { VehicleListScreen } from './VehicleListScreen';
