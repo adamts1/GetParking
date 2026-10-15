@@ -5,5 +5,5 @@
 export { AccountProvider, LoadStatus, useAccount } from './AccountProvider';
 export { AuthProvider, AuthStatus, useAuth } from './AuthProvider';
 export { LocationPermission, LocationProvider, useLocation, type Fix } from './LocationProvider';
-export { SessionNotice, SessionProvider, useSession } from './SessionProvider';
+export { SessionNotice, SessionProvider, useSession, type Completed } from './SessionProvider';
 export { LiveTrackingProvider, useLiveTracking } from './LiveTrackingProvider';

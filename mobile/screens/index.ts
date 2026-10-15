@@ -7,5 +7,6 @@
 export { AuthGate } from './AuthGate';
 export { HomeScreen } from './HomeScreen';
 export { ProfileScreen } from './ProfileScreen';
+export { SuccessScreen } from './SuccessScreen';
 export { VehicleForm } from './VehicleForm';
 export { VehicleListScreen } from './VehicleListScreen';

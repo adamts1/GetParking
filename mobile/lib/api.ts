@@ -99,3 +99,12 @@ export async function getActiveState(): Promise<ActiveState> {
   if (error) throw error;
   return data as ActiveState;
 }
+
+/** The searcher says they have parked. The server checks both drivers are
+    together (by its own copy of their positions), completes the match and
+    moves the credit; returns the searcher's new balance. */
+export async function confirmParked(matchId: string): Promise<number> {
+  const { data, error } = await supabase.rpc('confirm_parked', { p_match_id: matchId });
+  if (error) throw error;
+  return data as number;
+}

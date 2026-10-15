@@ -24,6 +24,14 @@ export function useHomeScreen() {
   const { session, match, busy, error, notice, clearError, clearNotice } = sessionState;
   const { otherPosition, searcherToSpotM, phase } = useLiveTracking();
   const [starting, setStarting] = useState<SessionKind | null>(null);
+  const [confirming, setConfirming] = useState(false);
+  const { completed } = sessionState;
+
+  // A completed match shows the success screen — on both phones, whichever
+  // one confirmed. It clears `completed` itself when the driver leaves it.
+  useEffect(() => {
+    if (completed) router.push({ pathname: '/success', params: { role: completed.role } });
+  }, [completed]);
 
   // The leaver is often not looking at the screen: tell them by touch when
   // the searcher gets close and when they arrive.
@@ -51,7 +59,13 @@ export function useHomeScreen() {
     session,
     match,
     waiting,
-    cancelling: busy && starting == null,
+    cancelling: busy && starting == null && !confirming,
+    confirming,
+    confirmParked: async () => {
+      setConfirming(true);
+      await sessionState.confirmParked();
+      setConfirming(false);
+    },
     /* Cancelling a match lets the other driver down, so it asks first; a
        plain wait is only the driver's own business. */
     cancel: () =>

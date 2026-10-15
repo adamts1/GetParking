@@ -99,7 +99,11 @@
       "insufficient_credits": "אין לך קרדיטים לחיפוש. פינוי חניה מזכה בקרדיט",
       "no_location": "עוד לא ידוע איפה אתם. נסו שוב בעוד רגע",
       "network": "אין חיבור לאינטרנט",
-      "unknown": "משהו השתבש. נסו שוב"
+      "unknown": "משהו השתבש. נסו שוב",
+      "too_far": "אתם עדיין לא ליד הנהג השני. צריך להיות עד 30 מ׳ ממנו",
+      "location_stale": "המיקום לא עדכני. נסו שוב בעוד רגע",
+      "location_inaccurate": "המיקום לא מדויק מספיק. נסו שוב בעוד רגע",
+      "match_not_active": "ההתאמה כבר לא פעילה"
     }
   },
   "location": {
@@ -134,7 +138,8 @@
       "spotSubtitle": "חניה ברחוב, מסומנת במפה",
       "navigate": "ניווט לחניה",
       "arrivedPill": "הגעת לחניה",
-      "distanceCaption": "עד החניה"
+      "distanceCaption": "עד החניה",
+      "parked": "חניתי"
     },
     "leaver": {
       "pill": "נהג בדרך אליך",
@@ -162,5 +167,15 @@
   "units": {
     "metres": "מ׳",
     "kilometres": "ק״מ"
+  },
+  "success": {
+    "searcherTitle": "חנית!",
+    "searcherBody": "תודה שהשתמשת באפליקציה. נסיעה טובה",
+    "leaverTitle": "החניה הועברה!",
+    "leaverBody": "עזרת לנהג אחר למצוא חניה, והרווחת קרדיט",
+    "earned": "קיבלת",
+    "paid": "שילמת",
+    "balance": "יתרה",
+    "home": "סיום"
   }
 }

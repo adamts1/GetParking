@@ -22,6 +22,7 @@ import * as api from '../lib/api';
 import {
   isOpen,
   MatchStatus,
+  type MatchRole,
   SessionError,
   sessionErrorOf,
   SessionKind,
@@ -41,6 +42,9 @@ export enum SessionNotice {
   CounterpartCancelled = 'counterpart_cancelled',
 }
 
+/** A match this driver was in has just completed — "parked". */
+export type Completed = { matchId: string; role: MatchRole };
+
 type SessionState = {
   /** The open session, or null when the driver is idle. */
   session: ServerSession | null;
@@ -50,11 +54,16 @@ type SessionState = {
   busy: boolean;
   error: SessionError | null;
   notice: SessionNotice | null;
+  /** Set once when the driver's match completes; cleared by the success screen. */
+  completed: Completed | null;
   clearError: () => void;
   clearNotice: () => void;
+  clearCompleted: () => void;
   startSearch: () => Promise<void>;
   startLeave: () => Promise<void>;
   cancel: () => Promise<void>;
+  /** The searcher has parked. */
+  confirmParked: () => Promise<void>;
 };
 
 const SessionContext = createContext<SessionState | null>(null);
@@ -79,6 +88,17 @@ function noticeBetween(previous: ActiveState | null, next: ActiveState): Session
   return null;
 }
 
+/** The active match from the previous answer, now completed. Worked out the
+    same way whichever phone confirmed, so both drivers see the success. */
+function completionBetween(previous: ActiveState | null, next: ActiveState): Completed | null {
+  const before = previous?.match;
+  const after = next.match;
+  if (!before || !after || before.id !== after.id) return null;
+  return before.status === MatchStatus.Active && after.status === MatchStatus.Completed
+    ? { matchId: after.id, role: after.role }
+    : null;
+}
+
 /** A match the driver had not seen in the previous answer. */
 const isNewMatch = (previous: ActiveState | null, next: ActiveState) =>
   next.match?.status === MatchStatus.Active && next.match.id !== previous?.match?.id;
@@ -96,6 +116,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<SessionError | null>(null);
   const [notice, setNotice] = useState<SessionNotice | null>(null);
+  const [completed, setCompleted] = useState<Completed | null>(null);
 
   const current = loaded && loaded.userId === userId ? loaded.state : null;
   const latest = current?.session ?? null;
@@ -111,6 +132,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const apply = useCallback((forUser: string, next: ActiveState) => {
     const happened = noticeBetween(lastState.current, next);
+    const finished = completionBetween(lastState.current, next);
+    if (finished) setCompleted(finished);
     // Felt as well as seen: the driver may be looking at the road.
     if (lastState.current && isNewMatch(lastState.current, next)) {
       void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -226,6 +249,20 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     [run],
   );
 
+  const matchId = match?.id ?? null;
+  const confirmParked = useCallback(
+    () =>
+      run(async () => {
+        if (!matchId) return;
+        // The server judges "together" by its own copy of both positions;
+        // make sure this phone's is current rather than up to 5 s old.
+        const reading = latestFix.current;
+        if (reading) await api.updateLocation(reading);
+        await api.confirmParked(matchId);
+      }),
+    [run, matchId],
+  );
+
   const value = useMemo<SessionState>(
     () => ({
       session,
@@ -233,13 +270,16 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       busy,
       error,
       notice,
+      completed,
       clearError: () => setError(null),
       clearNotice: () => setNotice(null),
+      clearCompleted: () => setCompleted(null),
       startSearch: () => start(SessionKind.Search),
       startLeave: () => start(SessionKind.Leave),
       cancel: () => run(api.cancelActive),
+      confirmParked,
     }),
-    [session, match, busy, error, notice, start, run],
+    [session, match, busy, error, notice, completed, start, run, confirmParked],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

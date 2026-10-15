@@ -1,0 +1,53 @@
+import { StyleSheet } from 'react-native';
+import { colors, SPACE } from '../../theme';
+
+export const styles = StyleSheet.create({
+  screen: { paddingHorizontal: SPACE.xxl },
+  badgeOuter: {
+    width: 96,
+    height: 96,
+    borderRadius: SPACE.xxl,
+    backgroundColor: 'rgba(52,211,153,0.12)',
+    borderWidth: 2,
+    borderColor: 'rgba(52,211,153,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 28,
+  },
+  badgeInner: {
+    width: 64,
+    height: 64,
+    borderRadius: 20,
+    backgroundColor: colors.success,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: colors.success,
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+  },
+  title: {
+    color: colors.text,
+    fontSize: 26,
+    fontWeight: '800',
+    marginBottom: SPACE.sm,
+    letterSpacing: -0.5,
+    textAlign: 'center',
+  },
+  body: { fontSize: 15, marginBottom: 36 },
+  card: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: SPACE.xl,
+    paddingVertical: 18,
+    marginBottom: 36,
+  },
+  cardLabel: { color: colors.textSecondary, fontSize: 12, marginBottom: SPACE.xs },
+  cardValue: { color: colors.text, fontSize: 28, fontWeight: '800' },
+  earned: { color: colors.success },
+  paid: { color: colors.textSecondary },
+  balance: { alignItems: 'flex-end' },
+  action: { alignSelf: 'stretch' },
+});
