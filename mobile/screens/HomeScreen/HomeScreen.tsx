@@ -51,6 +51,8 @@ function HomeContent() {
       ) : home.match ? (
         <MatchedSheet
           match={home.match}
+          phase={home.phase}
+          distance={home.distance}
           cancelling={home.cancelling}
           onCancel={home.cancel}
           onNavigate={home.navigate}

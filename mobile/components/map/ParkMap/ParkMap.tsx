@@ -2,9 +2,9 @@
    Camera behaviour lives in useParkMap; this file only draws. */
 
 import { Pressable, StyleSheet, View } from 'react-native';
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import type { LatLng } from '../../../lib/geo';
-import { colors } from '../../../theme';
+import { alpha, colors } from '../../../theme';
 import { GlassCard, Icon, IconName, useSheetHeight } from '../../ui';
 import { DriverDot, ParkingPin, PIN_ANCHOR, UserDot } from '../markers';
 import { darkMapStyle } from './mapStyle';
@@ -22,12 +22,15 @@ type Props = {
   otherColor: string;
   /** The spot being handed over, while matched. */
   spot: LatLng | null;
+  /** A dashed line from whoever is driving to the spot. */
+  routeFrom: LatLng | null;
+  routeColor: string;
   locateLabel: string;
 };
 
 const toCoordinate = (point: LatLng) => ({ latitude: point.lat, longitude: point.lng });
 
-export function ParkMap({ me, heading, radar, other, otherColor, spot, locateLabel }: Props) {
+export function ParkMap({ me, heading, radar, other, otherColor, spot, routeFrom, routeColor, locateLabel }: Props) {
   // However tall the panel at the bottom currently is — see SheetHeightProvider.
   const bottomInset = useSheetHeight();
   const { map, initialRegion, following, recenter, onMapReady, onPanDrag, onRegionChangeComplete } = useParkMap([me, other, spot]);
@@ -53,6 +56,15 @@ export function ParkMap({ me, heading, radar, other, otherColor, spot, locateLab
         onPanDrag={onPanDrag}
         onRegionChangeComplete={onRegionChangeComplete}
       >
+        {routeFrom && spot ? (
+          <Polyline
+            coordinates={[toCoordinate(routeFrom), toCoordinate(spot)]}
+            strokeColor={alpha(routeColor, 0.67)}
+            strokeWidth={3}
+            lineDashPattern={[8, 6]}
+          />
+        ) : null}
+
         {/* PIN_ANCHOR, not {x:0.5,y:1}: the pin's point is a rotated corner
             partway up its own view, so the marker cannot assume the bottom. */}
         {spot ? (

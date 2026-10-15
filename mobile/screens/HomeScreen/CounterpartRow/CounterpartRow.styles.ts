@@ -8,5 +8,8 @@ export const styles = StyleSheet.create({
   verb: { color: colors.textTertiary, fontWeight: '400', fontSize: 13 },
   car: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   swatch: { width: 10, height: 10, borderRadius: 3 },
+  distance: { alignItems: 'flex-end' },
+  distanceValue: { color: colors.text, fontSize: 18, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  distanceCaption: { color: colors.textSecondary, fontSize: 11 },
   carText: { color: colors.textSecondary, fontSize: 13, flexShrink: 1, textAlign: start },
 });
