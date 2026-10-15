@@ -3,10 +3,12 @@
 
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ToastTone } from '../../components/ui';
 import { useAutoClear } from '../../lib/hooks';
-import { SessionKind, SessionStatus } from '../../lib/session';
+import { navigateTo } from '../../lib/links';
+import { counterpartPosition, MatchRole, SessionKind, SessionStatus } from '../../lib/session';
 import { LocationPermission, useAccount, useLocation, useSession } from '../../providers';
 import { alpha, colors } from '../../theme';
 
@@ -37,7 +39,16 @@ export function useHomeScreen() {
     match,
     waiting,
     cancelling: busy && starting == null,
-    cancel: () => void sessionState.cancel(),
+    /* Cancelling a match lets the other driver down, so it asks first; a
+       plain wait is only the driver's own business. */
+    cancel: () =>
+      match
+        ? Alert.alert(translate('matched.cancelConfirmTitle'), translate('matched.cancelConfirmBody'), [
+            { text: translate('matched.keep'), style: 'cancel' },
+            { text: translate('matched.cancel'), style: 'destructive', onPress: () => void sessionState.cancel() },
+          ])
+        : void sessionState.cancel(),
+    navigate: () => match && void navigateTo(match.handoff),
 
     vehicle,
     credits: profile?.credits_balance ?? 0,
@@ -57,6 +68,10 @@ export function useHomeScreen() {
       me: fix,
       heading,
       radar: waiting ? alpha(accent, 0.35) : null,
+      other: counterpartPosition(match),
+      // The other driver in their side's colour: a leaver is green, a searcher blue.
+      otherColor: match?.role === MatchRole.Searcher ? colors.success : colors.primary,
+      spot: match?.handoff ?? null,
       locateLabel: translate('home.locate'),
     },
 

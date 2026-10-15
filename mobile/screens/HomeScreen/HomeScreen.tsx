@@ -49,7 +49,12 @@ function HomeContent() {
           />
         </>
       ) : home.match ? (
-        <MatchedSheet match={home.match} cancelling={home.cancelling} onCancel={home.cancel} />
+        <MatchedSheet
+          match={home.match}
+          cancelling={home.cancelling}
+          onCancel={home.cancel}
+          onNavigate={home.navigate}
+        />
       ) : (
         <WaitingSheet session={home.session} cancelling={home.cancelling} onCancel={home.cancel} />
       )}

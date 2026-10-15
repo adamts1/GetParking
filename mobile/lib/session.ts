@@ -38,13 +38,31 @@ export type ServerSession = {
   handoff: LatLng | null;
 };
 
+/** The other driver, as get_active_state() describes them: enough to
+    recognise the car in the street, and where they are while the match is
+    live (the server drops the position once it ends). */
+export type Counterpart = {
+  nickname: string;
+  make_model: string;
+  color: string;
+  plate_last_digits: string;
+  lat?: number;
+  lng?: number;
+};
+
 export type ServerMatch = {
   id: string;
   status: MatchStatus;
   expires_at: string;
   role: MatchRole;
   handoff: LatLng;
+  counterpart: Counterpart | null;
 };
+
+export const counterpartPosition = (match: ServerMatch | null): LatLng | null =>
+  match?.counterpart?.lat != null && match.counterpart.lng != null
+    ? { lat: match.counterpart.lat, lng: match.counterpart.lng }
+    : null;
 
 export type ActiveState = {
   credits: number | null;

@@ -1,12 +1,12 @@
-/* The live map behind the home screen. Camera behaviour lives in useParkMap;
-   this file only draws. */
+/* The live map behind the home screen: me, the other driver, the spot.
+   Camera behaviour lives in useParkMap; this file only draws. */
 
 import { Pressable, StyleSheet, View } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import type { LatLng } from '../../../lib/geo';
 import { colors } from '../../../theme';
 import { GlassCard, Icon, IconName, useSheetHeight } from '../../ui';
-import { UserDot } from '../markers';
+import { DriverDot, ParkingPin, PIN_ANCHOR, UserDot } from '../markers';
 import { darkMapStyle } from './mapStyle';
 import { styles } from './ParkMap.styles';
 import { useParkMap } from './useParkMap';
@@ -17,15 +17,20 @@ type Props = {
   heading: number | null;
   /** Radar ring colour while the driver is waiting for a match. */
   radar: string | null;
+  /** The other driver, while matched, drawn in their side's colour. */
+  other: LatLng | null;
+  otherColor: string;
+  /** The spot being handed over, while matched. */
+  spot: LatLng | null;
   locateLabel: string;
 };
 
 const toCoordinate = (point: LatLng) => ({ latitude: point.lat, longitude: point.lng });
 
-export function ParkMap({ me, heading, radar, locateLabel }: Props) {
+export function ParkMap({ me, heading, radar, other, otherColor, spot, locateLabel }: Props) {
   // However tall the panel at the bottom currently is — see SheetHeightProvider.
   const bottomInset = useSheetHeight();
-  const { map, initialRegion, following, recenter, onMapReady, onPanDrag, onRegionChangeComplete } = useParkMap([me]);
+  const { map, initialRegion, following, recenter, onMapReady, onPanDrag, onRegionChangeComplete } = useParkMap([me, other, spot]);
 
   return (
     <View style={StyleSheet.absoluteFill}>
@@ -48,6 +53,20 @@ export function ParkMap({ me, heading, radar, locateLabel }: Props) {
         onPanDrag={onPanDrag}
         onRegionChangeComplete={onRegionChangeComplete}
       >
+        {/* PIN_ANCHOR, not {x:0.5,y:1}: the pin's point is a rotated corner
+            partway up its own view, so the marker cannot assume the bottom. */}
+        {spot ? (
+          <Marker coordinate={toCoordinate(spot)} anchor={PIN_ANCHOR} tracksViewChanges={false}>
+            <ParkingPin />
+          </Marker>
+        ) : null}
+
+        {other ? (
+          <Marker coordinate={toCoordinate(other)} anchor={{ x: 0.5, y: 0.5 }} tracksViewChanges={false}>
+            <DriverDot color={otherColor} />
+          </Marker>
+        ) : null}
+
         {me ? (
           <Marker
             coordinate={toCoordinate(me)}

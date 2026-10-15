@@ -15,6 +15,7 @@
    the server re-matches a waiting searcher against it, and later checks the
    "parked" confirmation with it. */
 
+import * as Haptics from 'expo-haptics';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import * as api from '../lib/api';
@@ -59,6 +60,10 @@ type SessionState = {
 const SessionContext = createContext<SessionState | null>(null);
 
 const POLL_MS = 15_000;
+/* While matched the other car's dot comes from the server's copy of their
+   position, so it is fetched more often. Stage 5 replaces this with a live
+   broadcast between the two phones. */
+const MATCHED_POLL_MS = 5_000;
 const SUBSCRIBE_SETTLE_MS = 2_500;
 const LOCATION_UPLOAD_MS = 5_000;
 
@@ -73,6 +78,10 @@ function noticeBetween(previous: ActiveState | null, next: ActiveState): Session
   }
   return null;
 }
+
+/** A match the driver had not seen in the previous answer. */
+const isNewMatch = (previous: ActiveState | null, next: ActiveState) =>
+  next.match?.status === MatchStatus.Active && next.match.id !== previous?.match?.id;
 
 type Loaded = { userId: string; state: ActiveState };
 
@@ -102,6 +111,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const apply = useCallback((forUser: string, next: ActiveState) => {
     const happened = noticeBetween(lastState.current, next);
+    // Felt as well as seen: the driver may be looking at the road.
+    if (lastState.current && isNewMatch(lastState.current, next)) {
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
     lastState.current = next;
     if (happened) setNotice(happened);
     setLoaded({ userId: forUser, state: next });
@@ -167,12 +180,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, [userId, apply, refresh]);
 
   const openSessionId = session?.id ?? null;
+  const pollMs = match ? MATCHED_POLL_MS : POLL_MS;
 
   useEffect(() => {
     if (!openSessionId) return;
-    const timer = setInterval(() => void refresh(), POLL_MS);
+    const timer = setInterval(() => void refresh(), pollMs);
     return () => clearInterval(timer);
-  }, [openSessionId, refresh]);
+  }, [openSessionId, pollMs, refresh]);
 
   useEffect(() => {
     if (!openSessionId) return;
