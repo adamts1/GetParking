@@ -1,6 +1,6 @@
 # Runs on every pull request (and on main after a merge): the app must
 # typecheck and lint cleanly, and the database migrations must apply and pass
-# the scenario test on a throwaway Postgres + PostGIS.
+# the logic tests on a throwaway Postgres + PostGIS.
 name: Checks
 
 on:
@@ -33,7 +33,7 @@ jobs:
       - run: npx eslint . --max-warnings 0
 
   database:
-    name: Database – migrations & scenarios
+    name: Database – migrations & logic tests
     runs-on: ubuntu-latest
     services:
       postgres:
