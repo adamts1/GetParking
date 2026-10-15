@@ -26,9 +26,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: mobile/package-lock.json
-      # --legacy-peer-deps: an optional react-dom peer of Expo's devtools does
-      # not match react-native's pinned react; it is never loaded on mobile.
-      - run: npm ci --legacy-peer-deps
+      # Peer resolution is set in mobile/.npmrc, the same file EAS Build reads.
+      - run: npm ci
       - run: npx tsc --noEmit
       - run: npx eslint . --max-warnings 0
 
