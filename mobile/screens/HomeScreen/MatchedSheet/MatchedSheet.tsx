@@ -1,7 +1,8 @@
 /* Matched: the two drivers know about each other. The searcher drives to the
    spot; the leaver waits in it. Both watch the same three steps — on the way,
    nearby, arrived — worked out from how far the searcher is from the spot.
-   The "parked" confirmation comes in stage 6. */
+   Once nearby, the searcher can say "I parked"; the server checks the two
+   are really together before completing the match and moving the credit. */
 
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
@@ -29,11 +30,22 @@ type Props = {
   /** Searcher-to-spot distance, formatted; null until a position is known. */
   distance: string | null;
   cancelling: boolean;
+  confirming: boolean;
   onCancel: () => void;
   onNavigate: () => void;
+  onConfirmParked: () => void;
 };
 
-export function MatchedSheet({ match, phase, distance, cancelling, onCancel, onNavigate }: Props) {
+export function MatchedSheet({
+  match,
+  phase,
+  distance,
+  cancelling,
+  confirming,
+  onCancel,
+  onNavigate,
+  onConfirmParked,
+}: Props) {
   const { t: translate } = useTranslation();
   const timeLeft = useTimeLeft(match.expires_at);
   const steps = MATCH_PHASES.map((step) => translate(`matched.phases.${step}`));
@@ -71,8 +83,20 @@ export function MatchedSheet({ match, phase, distance, cancelling, onCancel, onN
           />
           <ProgressSteps labels={steps} reached={reached} color={colors.primary} />
           <View style={styles.actions}>
-            {arrived ? null : (
+            {/* GPS between buildings can be tens of metres out, so "parked" is
+                offered from "nearby", not only from "arrived"; the server has
+                the final word on whether the two are really together. */}
+            {phase === MatchPhase.OnTheWay ? (
               <Button large icon={IconName.Navigate} label={translate('matched.searcher.navigate')} onPress={onNavigate} />
+            ) : (
+              <Button
+                large
+                color={colors.success}
+                icon={IconName.Check}
+                label={translate('matched.searcher.parked')}
+                loading={confirming}
+                onPress={onConfirmParked}
+              />
             )}
             <DangerButton label={translate('matched.cancel')} onPress={onCancel} loading={cancelling} />
           </View>

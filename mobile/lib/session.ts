@@ -80,6 +80,11 @@ export enum SessionError {
   AlreadyOpen = 'session_already_open',
   NoActiveVehicle = 'no_active_vehicle',
   InsufficientCredits = 'insufficient_credits',
+  // confirm_parked
+  TooFar = 'too_far',
+  LocationStale = 'location_stale',
+  LocationInaccurate = 'location_inaccurate',
+  MatchNotActive = 'match_not_active',
   NoLocation = 'no_location',
   Network = 'network',
   Unknown = 'unknown',
@@ -91,6 +96,10 @@ const MESSAGE_CODES = [
   SessionError.AlreadyOpen,
   SessionError.NoActiveVehicle,
   SessionError.InsufficientCredits,
+  SessionError.TooFar,
+  SessionError.LocationStale,
+  SessionError.LocationInaccurate,
+  SessionError.MatchNotActive,
   SessionError.NoLocation,
 ];
 

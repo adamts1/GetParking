@@ -60,7 +60,7 @@ credit_ledger   id, user_id, match_id, delta, reason
 | 2 | Home: מפה, מיקום, bar עליון, כפתורים | ✅ |
 | 3 | Sessions: התחלה / ביטול / תפוגה | ✅ |
 | 4 | Matching + Realtime | ✅ |
-| 5 | Live tracking: מרחק, בדרך / קרוב / הגיע | 🔄 בבדיקה |
-| 6 | חניתי + קרדיטים + מסך הצלחה | |
+| 5 | Live tracking: מרחק, בדרך / קרוב / הגיע | ✅ |
+| 6 | חניתי + קרדיטים + מסך הצלחה | 🔄 בבדיקה |
 | 7 | Background location, push, מפנה שמתרחק, resume | |
 | 8 | בדיקות שטח, כיול רדיוסים וזמנים | |

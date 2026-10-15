@@ -54,8 +54,10 @@ function HomeContent() {
           phase={home.phase}
           distance={home.distance}
           cancelling={home.cancelling}
+          confirming={home.confirming}
           onCancel={home.cancel}
           onNavigate={home.navigate}
+          onConfirmParked={() => void home.confirmParked()}
         />
       ) : (
         <WaitingSheet session={home.session} cancelling={home.cancelling} onCancel={home.cancel} />

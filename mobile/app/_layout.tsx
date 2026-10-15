@@ -29,6 +29,7 @@ export default function RootLayout() {
                     <Stack.Screen name="profile" options={{ presentation: 'modal' }} />
                     <Stack.Screen name="vehicles/index" options={{ presentation: 'modal' }} />
                     <Stack.Screen name="vehicles/new" options={{ presentation: 'modal' }} />
+                    <Stack.Screen name="success" options={{ gestureEnabled: false, animation: 'fade' }} />
                   </Stack>
                 </LiveTrackingProvider>
               </SessionProvider>
