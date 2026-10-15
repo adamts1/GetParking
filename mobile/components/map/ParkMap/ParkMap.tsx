@@ -33,7 +33,7 @@ export function ParkMap({ me, heading, bottomInset, locateLabel }: Props) {
         provider={PROVIDER_DEFAULT}
         initialRegion={initialRegion}
         customMapStyle={darkMapStyle}
-        userInterfaceStyle="dark"
+        userInterfaceStyle="light"
         showsUserLocation={false}
         showsCompass={false}
         showsPointsOfInterests={false}
