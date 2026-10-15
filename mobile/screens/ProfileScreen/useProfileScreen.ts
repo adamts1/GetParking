@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
-import { useAccount } from '../../lib/account';
+import { useAccount } from '../../providers';
 import * as api from '../../lib/api';
 import { signOut } from '../../lib/auth';
 import { useAutoClear } from '../../lib/hooks';

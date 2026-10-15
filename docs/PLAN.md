@@ -57,8 +57,8 @@ credit_ledger   id, user_id, match_id, delta, reason
 |---|---|---|
 | 0 | Setup: Expo, Supabase, PostGIS, RTL, סכמה + RPCs | ✅ |
 | 1 | Auth (Google / Apple / email OTP), פרופיל, רכבים, רכב פעיל | ✅ |
-| 2 | Home: מפה, מיקום, bar עליון, כפתורים | 🔄 בבדיקה |
-| 3 | Sessions: התחלה / ביטול / תפוגה | |
+| 2 | Home: מפה, מיקום, bar עליון, כפתורים | ✅ |
+| 3 | Sessions: התחלה / ביטול / תפוגה | 🔄 בבדיקה |
 | 4 | Matching + Realtime | |
 | 5 | Live tracking: מרחק, בדרך / קרוב / הגיע | |
 | 6 | חניתי + קרדיטים + מסך הצלחה | |

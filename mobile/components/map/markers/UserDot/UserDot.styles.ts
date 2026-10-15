@@ -1,11 +1,19 @@
 import { StyleSheet } from 'react-native';
 import { colors } from '../../../../theme';
 
-/** The marker view is this big so the heading cone fits around the dot. */
-export const MARKER_SIZE = 72;
+/** The radar rings' full diameter; the marker view is this big so the rings
+    are not clipped while they expand. */
+export const MARKER_SIZE = 160;
 
 export const styles = StyleSheet.create({
   wrap: { width: MARKER_SIZE, height: MARKER_SIZE, alignItems: 'center', justifyContent: 'center' },
+  ring: {
+    position: 'absolute',
+    width: MARKER_SIZE,
+    height: MARKER_SIZE,
+    borderRadius: MARKER_SIZE / 2,
+    borderWidth: 1.5,
+  },
   /* Rotated about its own centre, which sits on the dot, so the cone swings
      around the driver instead of orbiting some other point. */
   headingWrap: {

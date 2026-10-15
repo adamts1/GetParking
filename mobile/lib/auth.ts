@@ -3,52 +3,14 @@
      - Apple and Google: native sheets that return an ID token, exchanged with
        signInWithIdToken. Both are hidden when not available in this build.
    Every new auth user gets a profile and starting credits from the
-   handle_new_user trigger; the nickname is asked for in onboarding. */
+   handle_new_user trigger; the nickname is asked for in onboarding.
+   Who is signed in right now is providers/AuthProvider.tsx. */
 
 import type { Session as AuthSession } from '@supabase/supabase-js';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Crypto from 'expo-crypto';
-import { createContext, useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import { isConfigured, supabase } from './supabase';
-
-export enum AuthStatus {
-  Loading = 'loading',
-  SignedIn = 'signed-in',
-  SignedOut = 'signed-out',
-}
-
-type AuthState = { status: AuthStatus; session: AuthSession | null };
-
-const AuthContext = createContext<AuthState>({ status: AuthStatus.Loading, session: null });
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<AuthState>(
-    isConfigured
-      ? { status: AuthStatus.Loading, session: null }
-      : { status: AuthStatus.SignedOut, session: null },
-  );
-
-  useEffect(() => {
-    if (!isConfigured) return;
-    let live = true;
-    void supabase.auth
-      .getSession()
-      .then(({ data }) => live && setState({ status: data.session ? AuthStatus.SignedIn : AuthStatus.SignedOut, session: data.session }))
-      .catch(() => live && setState({ status: AuthStatus.SignedOut, session: null }));
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (live) setState({ status: session ? AuthStatus.SignedIn : AuthStatus.SignedOut, session });
-    });
-    return () => {
-      live = false;
-      data.subscription.unsubscribe();
-    };
-  }, []);
-
-  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
-}
-
-export const useAuth = () => useContext(AuthContext);
+import { supabase } from './supabase';
 
 /** The first name a provider gave us, as a starting nickname. */
 export function suggestedNickname(session: AuthSession | null): string {

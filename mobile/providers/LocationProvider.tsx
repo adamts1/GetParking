@@ -8,7 +8,7 @@
 import * as Location from 'expo-location';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { AppState, Linking } from 'react-native';
-import type { LatLng } from './geo';
+import type { LatLng } from '../lib/geo';
 
 export type Fix = LatLng & { accuracy: number | null; at: number };
 
