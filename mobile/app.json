@@ -17,14 +17,14 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.adam-tsityat.parkingtlv",
+      "bundleIdentifier": "com.adam-tsityat.getparking",
       "usesAppleSignIn": true,
       "config": {
         "usesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.tsityat.parkingtlv",
+      "package": "com.adamtsityat.getparking",
       "adaptiveIcon": {
         "backgroundColor": "#0F1117",
         "foregroundImage": "./assets/android-icon-foreground.png",
